@@ -18,6 +18,7 @@ executable mega-exe
   other-modules:
       Language.Funt.Environment
       Language.Funt.Eval
+      Language.Funt.Monad
       Language.Funt.Parser
       Language.Funt.Syntax
       Paths_mega
@@ -27,6 +28,7 @@ executable mega-exe
   build-depends:
       base >=4.7 && <5
     , containers
+    , exceptions
     , megaparsec
     , mtl
     , text
