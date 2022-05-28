@@ -51,7 +51,7 @@ eval (IfThenElse cond tExp fExp) =
 eval (Abs v t)   = error "abs not yet implemented"
 eval (App t1 t2) = error "app not yet implemented"
 
-exec :: Text -> Either (ParseErrorBundle Text Void) Term
+{- exec :: Text -> Either (ParseErrorBundle Text Void) Term
 exec s = do
   ast <- runParser pTerm "" s
-  pure $ eval ast
+  pure $ eval ast -}
