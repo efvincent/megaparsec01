@@ -32,8 +32,9 @@ import Text.Megaparsec.Char (letterChar, space1)
 import qualified Text.Megaparsec.Char.Lexer as L
 import Text.Megaparsec.Char.Lexer (incorrectIndent)
 import Text.Megaparsec.Debug (dbg)
+import Language.Funt.Monad (EvalMonad(..))
 
-type Parser = ParsecT Void Text Identity
+type Parser = ParsecT Void Text EvalMonad
 
 data Span = Span SourcePos SourcePos
 data Spanned a = Spanned Span a
