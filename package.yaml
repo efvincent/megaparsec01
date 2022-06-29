@@ -12,6 +12,8 @@ dependencies:
   - megaparsec
   - text
   - exceptions
+  - random
+  - transformers
 
 executables:
   mega-exe:

@@ -2,8 +2,9 @@
 
 module Language.Funt.Parser where
 
-import Control.Applicative ((<|>), Alternative(empty))
+import Control.Applicative ((<|>), Alternative(empty, many))
 import Control.Monad ()
+import Control.Monad.State (modify)
 import Control.Monad.State.Strict
   (MonadState(get, put), State, StateT(runStateT), runState)
 import Data.Functor.Identity (Identity)
@@ -14,6 +15,7 @@ import qualified Data.Text as T
 import Data.Void (Void)
 import GHC.TypeLits (ErrorMessage(Text))
 import Language.Funt.Environment
+import Language.Funt.Monad (EvalMonad(..))
 import Language.Funt.Syntax (Literal(..), Term(..))
 import Text.Megaparsec
   ( MonadParsec(label, token)
@@ -28,11 +30,12 @@ import Text.Megaparsec
   , runParserT
   , some
   )
-import Text.Megaparsec.Char (letterChar, space1)
+import qualified Text.Megaparsec as M
+import qualified Text.Megaparsec.Byte as M
+import Text.Megaparsec.Char (alphaNumChar, asciiChar, char, letterChar, space1)
 import qualified Text.Megaparsec.Char.Lexer as L
 import Text.Megaparsec.Char.Lexer (incorrectIndent)
 import Text.Megaparsec.Debug (dbg)
-import Language.Funt.Monad (EvalMonad(..))
 
 type Parser = ParsecT Void Text EvalMonad
 
@@ -148,14 +151,24 @@ pIf = do
 
 -------------- State Example -------------
 
+-- | The type of parsers that evalute text and carry 
+-- a string as state
 type ParserS = ParsecT Void Text (State String)
 
+-- | A parser that parses input as a string, and also
+-- updates state with an indication of which branch it
+-- chose during the parse, either branc A or B.
+-- If the input is "foo" then it will put "branch A" in
+-- state. If not, then it will replace state with "branch B" (?)
 parser0 :: ParserS String
 parser0 = a <|> b
  where
   a = "foo" <$ put "branch A"
   b = get <* put "branch B"
 
+-- | A parser that parses input as a string, and also
+-- update state with an indication of which branch it
+-- chose during the parse, either A or B
 parser1 :: ParserS String
 parser1 = a <|> b
  where
@@ -165,6 +178,8 @@ parser1 = a <|> b
 mainS :: IO ()
 mainS = do
   let
+    -- @runState@ runs a state monad replacing the state
+    -- with the constant value "initial"
     run p = runState (runParserT p "" "") "initial"
     (Right a0, s0) = run parser0
     (Right a1, s1) = run parser1
@@ -177,7 +192,7 @@ mainS = do
   putStrLn ("Result:      " ++ show a1)
   putStrLn ("Final state: " ++ show s1)
 
--------------- Parser inb State Example -------------
+-------------- Parser in State Example -------------
 
 type ParserS2 = StateT String (ParsecT Void Text Identity)
 
@@ -194,3 +209,5 @@ mainS2 = do
     Right (a, s) = runParser p "" ""
   putStrLn ("Result:      " ++ show a)
   putStrLn ("Final State: " ++ show s)
+
+

@@ -16,11 +16,15 @@ extra-source-files:
 executable mega-exe
   main-is: Main.hs
   other-modules:
+      Dice
+      Dice2
       Language.Funt.Environment
       Language.Funt.Eval
       Language.Funt.Monad
       Language.Funt.Parser
       Language.Funt.Syntax
+      Rdr
+      Wrtr
       Paths_mega
   hs-source-dirs:
       src
@@ -31,5 +35,7 @@ executable mega-exe
     , exceptions
     , megaparsec
     , mtl
+    , random
     , text
+    , transformers
   default-language: Haskell2010
