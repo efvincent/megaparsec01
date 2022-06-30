@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Language.Funt.Parser where
+module Language.Funt.Parser (pTerm) where
 
 import Control.Applicative ((<|>), Alternative(empty, many))
 import Control.Monad ()

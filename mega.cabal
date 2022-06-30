@@ -23,7 +23,10 @@ executable mega-exe
       Language.Funt.Monad
       Language.Funt.Parser
       Language.Funt.Syntax
+      MegaState.MegaStateParser
       Rdr
+      RLE
+      RPS
       Wrtr
       Paths_mega
   hs-source-dirs:
